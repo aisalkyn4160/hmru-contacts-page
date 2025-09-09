@@ -191,3 +191,60 @@ if (document.querySelectorAll('.dropdown')) {
         dropdown.addEventListener('click', toggleDropdown);
     })
 }
+
+// Попап благодарности
+document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('thank-you-popup');
+    const closeBtn = document.getElementById('popup-close');
+    const okBtn = document.getElementById('popup-ok');
+    const form = document.getElementById('feedback-form');
+
+    // Функция для показа попапа
+    const showPopup = () => {
+        popup.classList.add('active');
+        document.body.classList.add('lock');
+    };
+
+    // Функция для скрытия попапа
+    const hidePopup = () => {
+        popup.classList.remove('active');
+        document.body.classList.remove('lock');
+    };
+
+    // Обработчик отправки формы
+    form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Здесь можно добавить отправку данных на сервер
+        const formData = new FormData(form);
+        const phone = formData.get('tel') || form.querySelector('input[type="tel"]').value;
+        
+        console.log('Отправка заявки:', phone);
+        
+        // Очищаем форму
+        form.reset();
+        
+        // Показываем попап
+        showPopup();
+    });
+
+    // Закрытие попапа по кнопке "Хорошо"
+    okBtn?.addEventListener('click', hidePopup);
+
+    // Закрытие попапа по крестику
+    closeBtn?.addEventListener('click', hidePopup);
+
+    // Закрытие попапа по клику на overlay
+    popup?.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            hidePopup();
+        }
+    });
+
+    // Закрытие попапа по ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popup.classList.contains('active')) {
+            hidePopup();
+        }
+    });
+});
